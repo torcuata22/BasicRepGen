@@ -8,6 +8,9 @@ class Data(models.Model):
     emi = models.IntegerField()
     tax = models.IntegerField()
     exp = models.IntegerField()
+    expenses_monthly = models.IntegerField(default=0)
+    income_monthly = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.name
