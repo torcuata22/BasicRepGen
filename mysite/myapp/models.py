@@ -9,5 +9,8 @@ class Data(models.Model):
     tax = models.IntegerField()
     exp = models.IntegerField()
 
+    def __str__(self):
+        return self.name
+
 
 
