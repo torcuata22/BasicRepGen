@@ -30,11 +30,12 @@
     <div class="flex">
         <div class="w-1/2">
             <div class="m-10 container font-bold text-indigo-600">Upload your CSV File</div>
+            
             <div class="container mx-auto w-full max-w-xs">
                 <form class="bg-white rounded px-8 pt-6 pb-8 mb-4" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                         <input class="inline-block font-bold text-sm text-blue-500" type="file" name="file" id="file">
-                        <input class="bg-blue-500 text-white font-bold py-2 px-4 rounded" type="submit" name="'submit">
+                        <input class="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-5" type="submit" name="'submit">
                 
                 </form>
             </div>
@@ -112,6 +113,23 @@
             </div>
         </div>
     </div>
+
+
+    <div class="flex gap-8 m-10">
+        <div class="w-1/2">
+            <div class="text-indigo-600 font-bold m-10" >Expense Spread Chart</div>
+            <div>
+                <canvas id="expenseSpreadChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+
+        <div class="w-1/2">
+            <div class="text-indigo-600 font-bold m-10" >Income Spread Chart</div>
+            <div>
+                <canvas id="incomeSpreadChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
     
     <script>
 
@@ -145,7 +163,10 @@
 
          //aray for monthly expenses:
          let net_monthly_expenses = []
-         console.log(net_monthly_expenses)
+        
+         let net_emis = []
+         let net_taxes = []
+         let net_expensess = []
         
         for(let i=1; i<table.rows.length -1; i++) {
             //get values from table cells
@@ -167,6 +188,10 @@
             //push monthly expenses into net_monthly_expes:
             net_monthly_expenses.push(net_monthly_expense)
             console.log(net_monthly_expenses)
+
+            net_emis.push(net_emi)
+            net_taxes.push(net_tax)
+            net_expensess.push(net_expenses)
           
             //convert string values to integers
             net_prices = parseInt(net_prices)
@@ -268,6 +293,91 @@ const ctxe = document.getElementById('expenseChart').getContext('2d');
         }
     }
 });
+
+
+const ctx3 = document.getElementById('expenseSpreadChart').getContext('2d');
+    const expenseSpreadChart = new Chart(ctx3, {
+    type: 'bar',
+    data: {
+        labels: properties,
+        datasets: [{
+            label: 'Monthly EMI',
+            data: net_emis,
+            backgroundColor: [
+                'rgba(255, 206, 86, 1)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        },
+        {
+            label: 'Monthly Taxes',
+            data: net_taxes,
+            backgroundColor: [
+                'rgba(215,102,255, 1)',
+            ],
+            borderColor: [
+                'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1
+        },
+        {
+            label: 'Monthly Other Expenses',
+            data: net_expensess,
+            backgroundColor: [
+                'rgba(255, 159, 64, 1)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }
+    ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+
+const ctx4 = document.getElementById('incomeSpreadChart').getContext('2d');
+    const incomeSpreadChart = new Chart(ctx4, {
+    type: 'doughnut',
+    data: {
+        labels: properties,
+        datasets: [{
+            label: 'Income in Dollars',
+            data: net_incomes,
+            backgroundColor: [
+                'rgba(255,99,132)',
+                'rgba(54,162,235)',
+                'rgba(255,255,86)',
+                'rgba(255, 25, 86)',
+                'rgba(153,102,255)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132)',
+                'rgba(194, 39, 245)',
+                'rgba(255, 205, 86)',
+                'rgba(255,135,39)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
     </script>
 
 </body>
